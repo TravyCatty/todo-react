@@ -17,6 +17,14 @@ function App() {
     setTodo('')
   }
 
+  function deleteTodo(id) {
+    const updateTodos = [...todos].filter((todo) => todo.id !== id)
+
+    setTodos(updateTodos)
+  }
+
+  function toggleComplete() {}
+
   return (
     <div className="App">
       <form onSubmit={handleSubmit}>
@@ -28,7 +36,11 @@ function App() {
         <button type="submit">Add todo</button>
       </form>
       {todos.map((todo) => (
-        <div key={todo.id}>{todo.text}</div>
+        <div key={todo.id}>
+          <div>{todo.text}</div>
+          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          <input type="checkbox" onChange={() => toggleComplete(todo.id)} />
+        </div>
       ))}
     </div>
   )
