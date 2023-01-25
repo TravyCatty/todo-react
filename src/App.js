@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -6,6 +6,20 @@ function App() {
   const [todo, setTodo] = useState('')
   const [todoEditing, setTodoEditing] = useState(null)
   const [editingText, setEditingText] = useState('')
+
+  useEffect(() => {
+    const temp = localStorage.getItem('todos')
+    const loadedTodos = JSON.parse(temp)
+
+    if (loadedTodos) {
+      setTodos(loadedTodos)
+    }
+  }, [])
+
+  useEffect(() => {
+    const temp = JSON.stringify(todos)
+    localStorage.setItem('todos', temp)
+  }, [todos])
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -75,8 +89,11 @@ function App() {
             onChange={() => toggleComplete(todo.id)}
             checked={todo.complited}
           />
-          <button onClick={() => setTodoEditing(todo.id)}>Edit todo</button>
-          <button onClick={() => editTodo(todo.id)}>Submit Edit</button>
+          {todoEditing === todo.id ? (
+            <button onClick={() => editTodo(todo.id)}>Submit Edit</button>
+          ) : (
+            <button onClick={() => setTodoEditing(todo.id)}>Edit todo</button>
+          )}
         </div>
       ))}
     </div>
